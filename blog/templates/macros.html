@@ -1,0 +1,20 @@
+
+{% macro render_post(post) %}
+<div class="row">
+    <div class="col-md-2 text-right metadata">
+        <ul class="list-unstyled">
+            <li>
+                {# Custom dateformat filter in filters.py #}
+                {{ post.datetime | dateformat("%d/%m/%y") }}
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-10">
+        <h1>
+            {{ post.title }}
+        </h1>
+        {# Built-in safe filter - automatically escapes characters that might interfere with HTML #}
+        {{ post.content | safe }}
+    </div>
+</div>
+{% endmacro %}
