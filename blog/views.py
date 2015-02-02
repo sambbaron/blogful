@@ -9,14 +9,36 @@ from models import Post
 
 # Route to top url
 @app.route("/")
-def posts():
+# Route using <page> placeholder
+@app.route("/page/<int:page>")
+# page - page number; paginate_by - how many posts on a page
+def posts(page=1, paginate_by=10):
+    # Convert 'page' to zero-indexed 'page_index'
+    page_index = page - 1
+    
+    # Number of posts
+    count = session.query(Post).count()
+    
+    # Start and ending posts calculated based on 'paginate_by' argument
+    start = page_index * paginate_by
+    end = start + paginate_by
+    
+    # Calculate total pages and whether current page is at beginning or end
+    total_pages = (count - 1) / paginate_by + 1
+    has_next = page_index < total_pages - 1
+    has_prev = page_index > 0
+    
     # Return query for posts table
     posts = session.query(Post)
     # Order posts by datetime descending
     posts = posts.order_by(Post.datetime.desc())
-    # Return all rows in posts table
-    posts = posts.all()
+    # Return posts for start/end indices
+    posts = posts[start:end]
     # Pass posts to posts.html template
     return render_template("posts.html",
-        posts=posts
+        posts=posts,
+        has_next=has_next,
+        has_prev=has_prev,
+        page=page,
+        total_pages=total_pages                           
     )
