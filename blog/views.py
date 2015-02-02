@@ -65,3 +65,12 @@ def add_post_post():
     session.commit()
     # Use Flask redirect function to send user back to home page
     return redirect(url_for("posts"))
+
+# View single post
+@app.route("/post/<int:id>")
+def single_post(id=1):
+    posts = session.query(Post)
+    posts = posts.filter(Post.id == id).all()
+    return render_template("posts.html",
+        posts=posts)
+                           

@@ -10,8 +10,8 @@
         </ul>
     </div>
     <div class="col-md-10">
-        <h1>
-            {{ post.title }}
+        <h1 class="post-title">
+            <a href="/post/{{post.id}}" title="Click to go to post">{{ post.title }}</a>
         </h1>
         {# Built-in safe filter - automatically escapes characters that might interfere with HTML #}
         {{ post.content | safe }}
