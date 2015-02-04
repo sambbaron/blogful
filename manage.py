@@ -16,6 +16,11 @@ from getpass import getpass
 from werkzeug.security import generate_password_hash
 from blog.models import User
 
+# Libraries/objects to manage db migration using Flask-Migrate/Alembic
+from flask.ext.migrate import Migrate, MigrateCommand
+from blog.database import Base
+
+
 # Create instance of 'manager' object
 manager = Manager(app)
 
@@ -74,6 +79,16 @@ def adduser():
                 password=generate_password_hash(password))
     session.add(user)
     session.commit()    
+
+# Holds metadata changes to DB
+class DB(object):
+    def __init__(self, metadata):
+        self.metadata = metadata
+
+# Create instance of Flask-Migrate 'Migrate' class with metadata from SQLAlchemy model (base)
+migrate = Migrate(app, DB(Base.metadata))
+# Adds all commands from Migrate class to management script
+manager.add_command('db', MigrateCommand)
 
 if __name__ == "__main__":
     manager.run()
