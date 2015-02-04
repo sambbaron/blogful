@@ -16,7 +16,7 @@ from flask import request, redirect, url_for
 
 # Flask objects for login
 from flask import flash
-from flask.ext.login import login_user, login_required
+from flask.ext.login import login_user, login_required, current_user
 from werkzeug.security import check_password_hash
 from models import User
 
@@ -70,6 +70,8 @@ def add_post_post():
     post = Post(
         title=request.form["title"],
         content=mistune.markdown(request.form["content"]),
+        # Set author using Flask-Login current_user object
+        author=current_user
     )
     session.add(post)
     session.commit()
