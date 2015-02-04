@@ -18,3 +18,6 @@ app.config.from_object(config_path)
 # Views and filters use 'app' object
 import views
 import filters
+
+# Import login and access to user ID
+import login
