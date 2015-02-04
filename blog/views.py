@@ -30,7 +30,7 @@ def posts(page=1, paginate_by=10):
     page_index = page - 1
     
     # Number of posts
-    count = session.query(Post).count()
+    count = session.query(Post).filter(Post.author==current_user).count()
     
     # Start and ending posts calculated based on 'paginate_by' argument
     start = page_index * paginate_by
@@ -43,6 +43,8 @@ def posts(page=1, paginate_by=10):
     
     # Return query for posts table
     posts = session.query(Post)
+    # Filter posts by current user
+    posts = posts.filter(Post.author==current_user)
     # Order posts by datetime descending
     posts = posts.order_by(Post.datetime.desc())
     # Return posts for start/end indices
@@ -92,7 +94,10 @@ def single_post(id=1):
 def edit_post_get(id=1):
     post = session.query(Post)
     post = post.filter(Post.id == id).first()
-    return render_template("edit_post.html", post_title=post.title, post_content=html2text.html2text(post.content))
+    if post.author == current_user:
+        return render_template("edit_post.html", post_title=post.title, post_content=html2text.html2text(post.content))
+    else:
+        return redirect(url_for("posts"))
 
 # POST request for editing existing post
 @app.route("/post/<int:id>/edit", methods=["POST"])
