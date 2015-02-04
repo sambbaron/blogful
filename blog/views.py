@@ -16,7 +16,7 @@ from flask import request, redirect, url_for
 
 # Flask objects for login
 from flask import flash
-from flask.ext.login import login_user
+from flask.ext.login import login_user, login_required
 from werkzeug.security import check_password_hash
 from models import User
 
@@ -58,11 +58,13 @@ def posts(page=1, paginate_by=10):
 
 # GET request for adding new post
 @app.route("/post/add", methods=["GET"])
+@login_required
 def add_post_get():
     return render_template("add_post.html")
 
 # POST request for adding post
 @app.route("/post/add", methods=["POST"])
+@login_required
 def add_post_post():
     # New post - use request.form Flask dictionary to access HTML form
     post = Post(
@@ -84,13 +86,15 @@ def single_post(id=1):
 
 # GET request for editing existing post
 @app.route("/post/<int:id>/edit", methods=["GET"])
+@login_required
 def edit_post_get(id=1):
     post = session.query(Post)
     post = post.filter(Post.id == id).first()
     return render_template("edit_post.html", post_title=post.title, post_content=html2text.html2text(post.content))
 
-# POST request for adding post
+# POST request for editing existing post
 @app.route("/post/<int:id>/edit", methods=["POST"])
+@login_required
 def edit_post_post(id=1):
     post = session.query(Post)
     post = post.filter(Post.id == id).first()
@@ -101,13 +105,15 @@ def edit_post_post(id=1):
 
 # GET request for deleting existing post
 @app.route("/post/<int:id>/delete", methods=["GET"])
+@login_required
 def delete_post_get(id=1):
     post = session.query(Post)
     post = post.filter(Post.id == id).first()
     return render_template("delete_post.html", post_title=post.title)
 
-# DELETE request for deleting existing post
+# POST request for deleting existing post
 @app.route("/post/<int:id>/delete", methods=["POST"])
+@login_required
 def delete_post_delete(id=1):
     post = session.query(Post)
     post = post.filter(Post.id == id).first()

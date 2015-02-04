@@ -15,7 +15,7 @@ login_manager.login_view = "login_get"
 # Error message classification used in conjunction with Bootstrap
 login_manager.login_message_category = "danger"
 
-# Function that accesses object that represents user ID
+# Function that accesses user object from user ID
 @login_manager.user_loader
 def load_user(id):
     return session.query(User).get(int(id))
