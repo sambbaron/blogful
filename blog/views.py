@@ -16,7 +16,7 @@ from flask import request, redirect, url_for
 
 # Flask objects for login
 from flask import flash
-from flask.ext.login import login_user, login_required, current_user, logout_user
+from flask.ext.login import login_user, login_required, current_user, logout_user, AnonymousUserMixin
 from werkzeug.security import check_password_hash
 from models import User
 
@@ -26,6 +26,11 @@ from models import User
 @app.route("/page/<int:page>")
 # page - page number; paginate_by - how many posts on a page
 def posts(page=1, paginate_by=10):
+    
+    # Test whether user logged in, if not then go to login page
+    if current_user.is_anonymous() == True:
+        return redirect(url_for("login_get"))
+    
     # Convert 'page' to zero-indexed 'page_index'
     page_index = page - 1
     
@@ -156,4 +161,4 @@ def login_post():
 @app.route("/logout")
 def logout():
     logout_user()
-    return render_template("login.html")
+    return redirect(url_for("login_get"))
