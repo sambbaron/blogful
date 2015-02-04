@@ -16,7 +16,7 @@ from flask import request, redirect, url_for
 
 # Flask objects for login
 from flask import flash
-from flask.ext.login import login_user, login_required, current_user
+from flask.ext.login import login_user, login_required, current_user, logout_user
 from werkzeug.security import check_password_hash
 from models import User
 
@@ -146,3 +146,9 @@ def login_post():
     login_user(user)
     # Either access resource selected at login or go to main /posts page
     return redirect(request.args.get('next') or url_for("posts"))
+
+# Logout
+@app.route("/logout")
+def logout():
+    logout_user()
+    return render_template("login.html")
