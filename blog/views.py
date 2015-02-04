@@ -14,6 +14,12 @@ import html2text
 # Flask objects for form post
 from flask import request, redirect, url_for
 
+# Flask objects for login
+from flask import flash
+from flask.ext.login import login_user
+from werkzeug.security import check_password_hash
+from models import User
+
 # Route to top url
 @app.route("/")
 # Route using <page> placeholder
@@ -108,3 +114,27 @@ def delete_post_delete(id=1):
     session.delete(post)
     session.commit()
     return redirect(url_for("posts"))
+
+# GET request for login
+@app.route("/login", methods=["GET"])
+def login_get():
+    return render_template("login.html")
+
+# POST request for login
+@app.route("/login", methods=["POST"])
+def login_post():
+    email = request.form["email"]
+    password = request.form["password"]
+    # Test whether user already exists
+    user = session.query(User).filter_by(email=email).first()
+    # If user does not exist or password does not match hashed password, then redirect with error message
+    if not user or not check_password_hash(user.password, password):
+        # Flask 'flash' function stores message to display in page
+        flash("Incorrect username or password", "danger")
+        return redirect(url_for("login_get"))
+    
+    # If username and password are correct, 
+    # Use Flask-Login login_user function to use cookie to identify user in browser
+    login_user(user)
+    # Either access resource selected at login or go to main /posts page
+    return redirect(request.args.get('next') or url_for("posts"))
