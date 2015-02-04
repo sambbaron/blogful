@@ -91,4 +91,20 @@ def edit_post_post(id=1):
     post.title=request.form["title"]
     post.content=mistune.markdown(request.form["content"])
     session.commit()
-    return redirect(url_for("posts"))             
+    return redirect(url_for("posts"))
+
+# GET request for deleting existing post
+@app.route("/post/<int:id>/delete", methods=["GET"])
+def delete_post_get(id=1):
+    post = session.query(Post)
+    post = post.filter(Post.id == id).first()
+    return render_template("delete_post.html", post_title=post.title)
+
+# DELETE request for deleting existing post
+@app.route("/post/<int:id>/delete", methods=["POST"])
+def delete_post_delete(id=1):
+    post = session.query(Post)
+    post = post.filter(Post.id == id).first()
+    session.delete(post)
+    session.commit()
+    return redirect(url_for("posts"))
