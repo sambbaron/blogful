@@ -11,6 +11,11 @@ from blog import app
 from blog.models import Post
 from blog.database import session
 
+# Libraries/objects to manage users
+from getpass import getpass
+from werkzeug.security import generate_password_hash
+from blog.models import User
+
 # Create instance of 'manager' object
 manager = Manager(app)
 
@@ -40,6 +45,34 @@ def seed():
             content=content
         )
         session.add(post)
+    session.commit()
+    
+@manager.command
+def adduser():
+    """Create new user"""
+    
+    # User input name and email address
+    name = raw_input("Name: ")
+    email = raw_input("Email: ")
+    # Test whether user already exists
+    if session.query(User).filter_by(email=email).first():
+        print "User with that email address already exists"
+        return
+    
+    # User input password (entered twice for verification)
+    password = ""
+    password_2 = ""
+    # Loop while either password is empty or passwords do not match
+    while not (password and password_2) or password != password_2:
+        # Use builtin getpass function to input password without echoing string
+        password = getpass("Password: ")
+        password_2 = getpass("Re-enter password: ")
+    # Create new user instance
+    # Password is converted to hash - string of characters based on SHA1 hashing algorithm
+    # Hashes only work one-way (password to hash string) to prevent malicious use of stored passwords
+    user = User(name=name, email=email,
+                password=generate_password_hash(password))
+    session.add(user)
     session.commit()    
 
 if __name__ == "__main__":
