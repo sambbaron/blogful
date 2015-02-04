@@ -9,6 +9,8 @@ from models import Post
 
 # Mistune - markdown parser for submitting formatted blog posts
 import mistune
+# Html2Text - convert html to markdown
+import html2text
 # Flask objects for form post
 from flask import request, redirect, url_for
 
@@ -48,7 +50,7 @@ def posts(page=1, paginate_by=10):
         total_pages=total_pages                           
     )
 
-# GET request for adding post
+# GET request for adding new post
 @app.route("/post/add", methods=["GET"])
 def add_post_get():
     return render_template("add_post.html")
@@ -73,4 +75,20 @@ def single_post(id=1):
     posts = posts.filter(Post.id == id).all()
     return render_template("posts.html",
         posts=posts)
-                           
+
+# GET request for editing existing post
+@app.route("/post/<int:id>/edit", methods=["GET"])
+def edit_post_get(id=1):
+    post = session.query(Post)
+    post = post.filter(Post.id == id).first()
+    return render_template("edit_post.html", post_title=post.title, post_content=html2text.html2text(post.content))
+
+# POST request for adding post
+@app.route("/post/<int:id>/edit", methods=["POST"])
+def edit_post_post(id=1):
+    post = session.query(Post)
+    post = post.filter(Post.id == id).first()
+    post.title=request.form["title"]
+    post.content=mistune.markdown(request.form["content"])
+    session.commit()
+    return redirect(url_for("posts"))             
