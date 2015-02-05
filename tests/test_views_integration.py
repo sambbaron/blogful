@@ -44,18 +44,27 @@ class TestViews(unittest.TestCase):
             http_session["user_id"] = str(self.user.id)  # User ID from example user created in setUp method
             http_session["_fresh"] = True  # Defines session as active
 
+    def post_get(self):
+        # Use 'self.client.get' method to send HTTP GET request to "/post/add"
+        pass
+    
+    def add_post(self):        
+        # Use 'self.client.post' method to send HTTP POST request to "/post/add"
+        # 'data' parameter simulates form submission
+        return self.client.post("/post/add", data={
+            "title": "Test Post",
+            "content": "Test content"
+        })
+
+
     def testAddPost(self):
         """Test adding post"""
         
         # Login using login simulation method from above
         self.simulate_login()
         
-        # Use 'self.client.post' method to send HTTP POST request to "/post/add"
-        # 'data' parameter simulates form submission
-        response = self.client.post("/post/add", data={
-            "title": "Test Post",
-            "content": "Test content"
-        })
+        # Add post
+        response = self.add_post()
         
         # Test app response
         self.assertEqual(response.status_code, 302)  # 302 Found - redirect after POST
@@ -67,6 +76,31 @@ class TestViews(unittest.TestCase):
         post = posts[0]
         self.assertEqual(post.title, "Test Post")
         self.assertEqual(post.content, "<p>Test content</p>\n")
+        self.assertEqual(post.author, self.user)        
+
+    def testEditPost(self):
+        """Test editing post"""
+        
+        # Login using login simulation method from above
+        self.simulate_login()
+        
+        # Add post
+        self.add_post()
+        
+        # Edit Post
+        response = self.client.post("/post/1/edit", data={
+            "title": "Edit Post",
+            "content": "Edit content"
+        })
+        
+        # Test app response
+        self.assertEqual(response.status_code, 302)  # 302 Found - redirect after POST
+        self.assertEqual(urlparse(response.location).path, "/")  # Redirect path is root URI
+        # Test post data
+        posts = session.query(models.Post).all() 
+        post = posts[0]
+        self.assertEqual(post.title, "Edit Post")
+        self.assertEqual(post.content, "<p>Edit content</p>\n")
         self.assertEqual(post.author, self.user)        
 
 if __name__ == "__main__":
