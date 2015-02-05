@@ -69,7 +69,10 @@ class TestViews(unittest.TestCase):
         self.browser.fill("password", "test")
         button = self.browser.find_by_css("button[type=submit]")
         button.click()
-        self.assertEqual(self.browser.url, self.url_path + "/login")        
+        self.assertEqual(self.browser.url, self.url_path + "/login")    
+        
+    def testAddPost(self):
+        """Test add post"""
 
 if __name__ == "__main__":
     unittest.main()

@@ -27,7 +27,7 @@
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"><a href="/post/add"><button type="button" class="btn btn-default navbar-btn">Add Post</button></a></span>
+                        <span class="icon-bar"><a href="/post/add"><button type="button" name="add-post" class="btn btn-default navbar-btn">Add Post</button></a></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
@@ -38,9 +38,9 @@
                         <span class="icon-bar">
                         {% if current_user.name %}
                         <p class="navbar-text">Welcome {{current_user.name}}</p>
-                        <a href="/logout"><button type="button" class="btn btn-default navbar-btn">Logout</button></a>
+                        <a href="/logout"><button type="button" name="logout" class="btn btn-default navbar-btn">Logout</button></a>
                         {% else %}
-                        <a href="/login"><button type="button" class="btn btn-default navbar-btn">Login</button></a>
+                        <a href="/login"><button type="button" name="login" class="btn btn-default navbar-btn">Login</button></a>
                         {% endif %}
                         </span>
                     </ul>
