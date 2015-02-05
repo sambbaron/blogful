@@ -1,4 +1,4 @@
-"""Integration test of add_post_post view"""
+"""Integration Testing"""
 
 import os
 import unittest

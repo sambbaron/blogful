@@ -90,6 +90,7 @@ class TestViews(unittest.TestCase):
         self.browser.fill("content", "New post content")
         button = self.browser.find_by_css("button[type=submit]")
         button.click()
+        # Test whether redirected to root path
         self.assertEqual(self.browser.url, self.url_path + "/")    
 
 if __name__ == "__main__":
