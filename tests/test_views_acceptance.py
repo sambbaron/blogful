@@ -48,17 +48,21 @@ class TestViews(unittest.TestCase):
         self.process.terminate()
         session.close()
         Base.metadata.drop_all(engine)
-        self.browser.quit()        
+        self.browser.quit()    
         
-        
-    def testLoginCorrect(self):
-        """Test successful login using example user"""
+    def simulate_login(self):
+        """Login using example user"""
         
         self.browser.visit(self.url_path + "/login")  # Go to /login page
         self.browser.fill("email", "alice@example.com")  # Fill in "email" form
         self.browser.fill("password", "test")        # Fill in "password" form
         button = self.browser.find_by_css("button[type=submit]")  # Press "submit" button
         button.click()
+        
+    def testLoginCorrect(self):
+        """Test successful login using example user"""        
+        
+        self.simulate_login()
         self.assertEqual(self.browser.url, self.url_path + "/") # Test whether redirected to root path
 
     def testLoginIncorrect(self):
@@ -73,6 +77,20 @@ class TestViews(unittest.TestCase):
         
     def testAddPost(self):
         """Test add post"""
+        
+        # Login
+        self.simulate_login()
+        
+        # Click on "Add Post" button
+        self.browser.find_by_css("button[name='add-post']").click()
+        # Test whether on "Add Post" page
+        self.assertEqual(self.browser.url, self.url_path + "/post/add")
+        # Fill add post form
+        self.browser.fill("title", "New Post Title")
+        self.browser.fill("content", "New post content")
+        button = self.browser.find_by_css("button[type=submit]")
+        button.click()
+        self.assertEqual(self.browser.url, self.url_path + "/")    
 
 if __name__ == "__main__":
     unittest.main()

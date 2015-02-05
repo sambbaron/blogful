@@ -44,10 +44,6 @@ class TestViews(unittest.TestCase):
             http_session["user_id"] = str(self.user.id)  # User ID from example user created in setUp method
             http_session["_fresh"] = True  # Defines session as active
 
-    def post_get(self):
-        # Use 'self.client.get' method to send HTTP GET request to "/post/add"
-        pass
-    
     def add_post(self):        
         # Use 'self.client.post' method to send HTTP POST request to "/post/add"
         # 'data' parameter simulates form submission
