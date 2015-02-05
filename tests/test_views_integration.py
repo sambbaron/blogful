@@ -44,6 +44,7 @@ class TestViews(unittest.TestCase):
             http_session["user_id"] = str(self.user.id)  # User ID from example user created in setUp method
             http_session["_fresh"] = True  # Defines session as active
 
+<<<<<<< HEAD
     def post_get(self):
         # Use 'self.client.get' method to send HTTP GET request to "/post/add"
         pass
@@ -57,14 +58,25 @@ class TestViews(unittest.TestCase):
         })
 
 
+=======
+>>>>>>> 21cb3174faa920119d2e8f17da4ac8411d4d87e3
     def testAddPost(self):
         """Test adding post"""
         
         # Login using login simulation method from above
         self.simulate_login()
         
+<<<<<<< HEAD
         # Add post
         response = self.add_post()
+=======
+        # Use 'self.client.post' method to send HTTP POST request to "/post/add"
+        # 'data' parameter simulates form submission
+        response = self.client.post("/post/add", data={
+            "title": "Test Post",
+            "content": "Test content"
+        })
+>>>>>>> 21cb3174faa920119d2e8f17da4ac8411d4d87e3
         
         # Test app response
         self.assertEqual(response.status_code, 302)  # 302 Found - redirect after POST
@@ -78,6 +90,7 @@ class TestViews(unittest.TestCase):
         self.assertEqual(post.content, "<p>Test content</p>\n")
         self.assertEqual(post.author, self.user)        
 
+<<<<<<< HEAD
     def testEditPost(self):
         """Test editing post"""
         
@@ -122,5 +135,7 @@ class TestViews(unittest.TestCase):
         posts = session.query(models.Post).all() 
         self.assertEqual(len(posts), 0)
         
+=======
+>>>>>>> 21cb3174faa920119d2e8f17da4ac8411d4d87e3
 if __name__ == "__main__":
     unittest.main()
