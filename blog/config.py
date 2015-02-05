@@ -14,6 +14,6 @@ class DevelopmentConfig(object):
 
 # Config for testing environment    
 class TestingConfig(object):
-    SQLALCHEMY_DATABASE_URI = "postgresql://action:action@localhost:5432/blogful-test"  # Different database
+    SQLALCHEMY_DATABASE_URI = "postgresql://:@localhost:5432/blogful-test"  # Different database
     DEBUG = False      # Turn off debugging
     SECRET_KEY = "Not secret"    # Different secret key not tied to environment variable
