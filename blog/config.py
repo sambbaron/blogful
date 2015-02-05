@@ -4,7 +4,7 @@ import os
 
 # Configuration variables that control app
 class DevelopmentConfig(object):
-    SQLALCHEMY_DATABASE_URI = "postgresql://action:action@localhost:5432/blogful"  # Environment variable for database location
+    SQLALCHEMY_DATABASE_URI = "postgresql://@localhost:5432/blogful"  # Environment variable for database location
     DEBUG = True  # Use Flask debug mode to track errors
     SECRET_KEY = os.environ.get("BLOGFUL_SECRET_KEY", "")
     # 'SECRET_KEY' used to cryptographically secure app
