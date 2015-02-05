@@ -101,7 +101,26 @@ class TestViews(unittest.TestCase):
         post = posts[0]
         self.assertEqual(post.title, "Edit Post")
         self.assertEqual(post.content, "<p>Edit content</p>\n")
-        self.assertEqual(post.author, self.user)        
+        self.assertEqual(post.author, self.user)                
 
+    def testDeletePost(self):
+        """Test deleting post"""
+        
+        # Login using login simulation method from above
+        self.simulate_login()
+        
+        # Add post
+        self.add_post()
+        
+        # Delete Post
+        response = self.client.post("/post/1/delete")
+        
+        # Test app response
+        self.assertEqual(response.status_code, 302)  # 302 Found - redirect after POST
+        self.assertEqual(urlparse(response.location).path, "/")  # Redirect path is root URI
+        # Test post data
+        posts = session.query(models.Post).all() 
+        self.assertEqual(len(posts), 0)
+        
 if __name__ == "__main__":
     unittest.main()
