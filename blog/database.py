@@ -6,6 +6,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from blog import app
 
+import multiprocessing
+
 # Engine to communicate with database using URI name from config.py
 engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
 # Base - db model repository
