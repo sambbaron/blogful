@@ -8,6 +8,7 @@ before_script:
     - psql -c 'create database blogful_test;' -U postgres
 script:
     - PYTHONPATH=. python tests/test_filter.py
+    - PYTHONPATH=. python tests/test_views_acceptance.py    
     - PYTHONPATH=. python tests/test_views_integration.py
-    - PYTHONPATH=. python tests/test_views_acceptance.py
+
     
