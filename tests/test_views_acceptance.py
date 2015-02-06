@@ -47,7 +47,7 @@ class TestViews(unittest.TestCase):
         # Remove the tables and their data from the database
         self.process.terminate()
         session.close()
-        Base.metadata.drop_all(bind=engine, checkfirst=False)
+        Base.metadata.drop_all(engine)
         self.browser.quit()    
         
     def simulate_login(self):
